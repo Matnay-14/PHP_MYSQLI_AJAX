@@ -24,6 +24,14 @@ if (isset($_POST['hapusSiswa'])) {
     $q = "DELETE FROM tbl_siswa WHERE id_siswa = '$id_siswa'";
     $connection->query($q);
 }
+//jika tombol update di klil
+if (isset($_POST['update'])) {
+    $nama_lengkap = $_POST['nama_lengkap'];
+    $nis = $_POST['nis'];
+    $alamat = $_POST['alamat'];
+    $q = "UPDATE tbl_siswa SET nama_lengkap = '$nama_lengkap' , nis = '$nis' , alamat =  '$alamat' WHERE id_siswa = '$id_siswa' ";
+    $connection->query($q);
+}
 ?>
 
 <!doctype html>
@@ -49,7 +57,7 @@ if (isset($_POST['hapusSiswa'])) {
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-body">
-                        <label>SISWA</label>
+                        <label><b>SISWA</b></label><br>
                         Selamat Datang <?php echo $_SESSION['nama_lengkap'] ?>
                         <br>
                         <button class="btn btn-success" data-toggle="modal" data-target="#modalAdd">+ tambah data</button>
@@ -65,7 +73,7 @@ if (isset($_POST['hapusSiswa'])) {
                                             </div>
                                             <div class="form-group">
                                                 <label>NIS</label>
-                                                <input type="text" placeholder="isikan nama NIS" name="nis" id="" class="form-control">
+                                                <input type="text" placeholder="isikan NIS" name="nis" id="" class="form-control">
                                             </div>
                                             <div class="form-group">
                                                 <label>Alamat</label>
@@ -111,7 +119,32 @@ if (isset($_POST['hapusSiswa'])) {
                                                 <button name="hapusSiswa" class="btn btn-danger">hapus
                                             </form>
                                         </td>
-                                        <td></td>
+                                        <td>
+                                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalUpdate<?= $d-> id_siswa ?>">Update</button>
+                                            <div class="modal fade" id="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">Update Data</div>
+                                                    <form action="" method="post">
+                                                        <input type="hidden" name="id_siswa" value=" <?= $d -> id_siswa ?> ">
+                                                        <div class="form-group">
+                                                            <label>Nama Lengkap</label>
+                                                            <input type="text" value=" <?= $d-> nama_lengkap ?>" placeholder="Isikan nama" name="nama_lengkap" id="" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>NIS</label>
+                                                            <input type="text" value=" <?= $d-> nis ?>" placeholder="Isikan nis" name="nis" id="" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Alamat</label>
+                                                            <input type="text" value=" <?= $d-> alamat ?>" placeholder="Isikan alamat" name="alamat" id="" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <button name="update" type="submit" class="from-control btn btn-primary">Update</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 <?php
                                 }
