@@ -24,12 +24,13 @@ if (isset($_POST['hapusSiswa'])) {
     $q = "DELETE FROM tbl_siswa WHERE id_siswa = '$id_siswa'";
     $connection->query($q);
 }
-//jika tombol update di klil
+// jika tombol update di klik
 if (isset($_POST['update'])) {
+    $id_siswa = $_POST['id_siswa'];
     $nama_lengkap = $_POST['nama_lengkap'];
     $nis = $_POST['nis'];
     $alamat = $_POST['alamat'];
-    $q = "UPDATE tbl_siswa SET nama_lengkap = '$nama_lengkap' , nis = '$nis' , alamat =  '$alamat' WHERE id_siswa = '$id_siswa' ";
+    $q = "UPDATE tbl_siswa SET nama_lengkap='$nama_lengkap', nis='$nis', alamat='$alamat' WHERE id_siswa = '$id_siswa'";
     $connection->query($q);
 }
 ?>
@@ -51,14 +52,13 @@ if (isset($_POST['update'])) {
         <div class="row">
 
             <?php include '../assets/menu.php';
-            // echo $_SERVER['SERVER_NAME'];
             ?>
 
             <div class="col-md-9">
                 <div class="card">
                     <div class="card-body">
-                        <label><b>SISWA</b></label><br>
-                        Selamat Datang <?php echo $_SESSION['nama_lengkap'] ?>
+                        <label>SISWA</label>
+                        Selamat Datang <?php echo $_SESSION['username'] ?>
                         <br>
                         <button class="btn btn-success" data-toggle="modal" data-target="#modalAdd">+ tambah data</button>
                         <div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="modalAddLabel" aria-hidden="true">
@@ -73,7 +73,7 @@ if (isset($_POST['update'])) {
                                             </div>
                                             <div class="form-group">
                                                 <label>NIS</label>
-                                                <input type="text" placeholder="isikan NIS" name="nis" id="" class="form-control">
+                                                <input type="text" placeholder="isikan nama NIS" name="nis" id="" class="form-control">
                                             </div>
                                             <div class="form-group">
                                                 <label>Alamat</label>
@@ -91,6 +91,7 @@ if (isset($_POST['update'])) {
                         <table class="table table-responsive">
                             <thead>
                                 <tr>
+                                    <th>No</th>
                                     <th>nama lengkap</th>
                                     <th>nis</th>
                                     <th>alamat</th>
@@ -100,10 +101,13 @@ if (isset($_POST['update'])) {
                             </thead>
                             <tbody>
                                 <?php
+                                $no = 1;
                                 $q = "SELECT * FROM tbl_siswa";
                                 $r = $connection->query($q);
                                 while ($d = mysqli_fetch_object($r)) { ?>
                                     <tr>
+                                        <td><?= $no;
+                                            $no++; ?></td>
                                         <td>
                                             <?= $d->nama_lengkap ?>
                                         </td>
@@ -116,34 +120,39 @@ if (isset($_POST['update'])) {
                                         <td>
                                             <form action="" method="post">
                                                 <input type="hidden" name="id_siswa" value="<?= $d->id_siswa ?>">
-                                                <button name="hapusSiswa" class="btn btn-danger">hapus
+                                                <button name="hapusSiswa" class="btn btn-danger">hapus<font-awesome-icon icon="fa-solid fa-trash" />
                                             </form>
                                         </td>
-                                        <td>
-                                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalUpdate<?= $d-> id_siswa ?>">Update</button>
-                                            <div class="modal fade" id="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">Update Data</div>
-                                                    <form action="" method="post">
-                                                        <input type="hidden" name="id_siswa" value=" <?= $d -> id_siswa ?> ">
-                                                        <div class="form-group">
-                                                            <label>Nama Lengkap</label>
-                                                            <input type="text" value=" <?= $d-> nama_lengkap ?>" placeholder="Isikan nama" name="nama_lengkap" id="" class="form-control">
+
+                                        <td><button class="btn btn-primary" data-toggle="modal" data-target="#modalUpdate<?= $d->id_siswa ?>">edit</button>
+                                            <div class="modal fade" id="modalUpdate<?= $d->id_siswa ?>">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">Edit Data</div>
+                                                            <div class="modal-body">
+                                                                <form action="" method="post">
+                                                                    <input type="hidden" name="id_siswa" value="<?= $d->id_siswa ?>">
+                                                                    <div class="form-group">
+                                                                        <label>Nama Lengkap</label>
+                                                                        <input type="text" value="<?= $d->nama_lengkap ?>" placeholder="isikan nama anda" name="nama_lengkap" id="" class="form-control">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>NIS</label>
+                                                                        <input type="text" value="<?= $d->nis ?>" placeholder="isikan nama NIS" name="nis" id="" class="form-control">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label>Alamat</label>
+                                                                        <input type="text" value="<?= $d->alamat ?>" placeholder="isikan alamat" name="alamat" id="" class="form-control">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <button name="update" type="submit" class="form-control btn btn-primary">Update</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label>NIS</label>
-                                                            <input type="text" value=" <?= $d-> nis ?>" placeholder="Isikan nis" name="nis" id="" class="form-control">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Alamat</label>
-                                                            <input type="text" value=" <?= $d-> alamat ?>" placeholder="Isikan alamat" name="alamat" id="" class="form-control">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <button name="update" type="submit" class="from-control btn btn-primary">Update</button>
-                                                        </div>
-                                                    </form>
+                                                    </div>
                                                 </div>
-                                            </div>
                                         </td>
                                     </tr>
                                 <?php
@@ -160,6 +169,7 @@ if (isset($_POST['update'])) {
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"></script>
 </body>
 
 </html>
